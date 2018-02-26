@@ -1,4 +1,4 @@
-Spatial_processing_MR_pm_job
+function pm4_Spatial_processing_MPRAGE
 %-----------------------------------------------------------------------
 % Job saved on 13-Nov-2017 14:38:15 by cfg_util (rev $Rev: 6942 $)
 % spm SPM - SPM12 (12.3)

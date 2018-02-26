@@ -87,13 +87,15 @@ end
 %------------------------------------------
 % Delete dynamic directories
 global data;
-root_pth ='C:/thk';
-
-data = COF_data(root_pth);
-
-for isub = 5:size(data,2)
+root_pth ='D:/thk';
+data = pm0_COF_data(root_pth);
+for isub = 1:size(data,2)
     cd(fullfile(data(isub).dir,'PET'));
+    if exist('Dynamic')==7
     rmdir('Dynamic','s')
+    end
+    delete('*.nii')   
+    fprintf(1,'Sub %i %s\n',isub, data(isub).dir)
 end
 
 %------------------------------------------

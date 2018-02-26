@@ -12,15 +12,32 @@ function pm8_STAT_MR
 
 %-----------------------------------------------------------------------
 global data;
-% spm fmri;
+spm fmri;
 root_pth ='D:\thk';
 addpath('D:\thk\thk_codes')
 data = pm0_COF_data(fullfile(root_pth));
 numparam = 4;
 
 % =========================================================================
+% Smooth MR files
+% =========================================================================
+% MRFiles = [];
+% for isub = 1:size(data,2)
+%     if ~isempty(spm_select('FPList',fullfile(data(isub).dir,'MRI','nii2','Results'),strcat('^ws',data(isub).LongMRI,'.+\.nii')))
+%         MRFiles = [MRFiles;...
+%             cellstr(spm_select('FPList',fullfile(data(isub).dir,'MRI','nii2','Results'),strcat('^ws',data(isub).LongMRI,'.+\.nii')))];
+%     end
+% end
+% matlabbatch{1}.spm.spatial.smooth.data = MRFiles;
+% matlabbatch{1}.spm.spatial.smooth.fwhm = [4 4 4];
+% matlabbatch{1}.spm.spatial.smooth.dtype = 0;
+% matlabbatch{1}.spm.spatial.smooth.im = 0;
+% matlabbatch{1}.spm.spatial.smooth.prefix = 's';
+%     spm_jobman('run',matlabbatch);
+
+% =========================================================================
 % SEPARATE T2 TESTS FOR EACH PARAMETER
-MTTmp=[]; PDTmp= []; R1Tmp = []; R2s_OLSTmp = [];subjcount = 0;
+matlabbatch= []; MTTmp=[]; PDTmp= []; R1Tmp = []; R2s_OLSTmp = [];subjcount = 0;
 for isub = 1:size(data,2)-1
     if exist(fullfile(root_pth,data(isub).id,'MRI','nii2','Results'),'dir')==0
         fprintf(1,'Pas de MRI pour %s\n',data(isub).id)
@@ -42,7 +59,7 @@ end
 Param = {'MT' 'PD' 'R1' 'R2s_OLS'};
 for iparam = 1:numparam
     Tmp = cellstr(spm_select('FPList',fullfile(data(end).dir,'MRI','nii2','Results'),strcat('^sws',data(end).LongMRI,'.+ ', Param{iparam} ,'\.nii')));
-    DOI = cellstr(['D:\thk\RES' num2str(3+iparam) ]);
+    DOI = cellstr(['D:\thk\RES_' Param{iparam} ]);
     POI = eval([Param{iparam} 'Tmp']);
     matlabbatch{1}.spm.stats.factorial_design.dir = DOI;
     matlabbatch{1}.spm.stats.factorial_design.des.t2.scans1 = Tmp;

@@ -23,7 +23,7 @@ addpath('D:\thk\thk_codes')
 
 data = pm0_COF_data(fullfile(root_pth));
 
-for isub = 1:size(data,2)
+for isub = 5:size(data,2)
     fprintf(1,'PROCESSING SUBJECT %i : %s\n',isub,data(isub).id)
     
     % check for MRI an dPET directories
@@ -36,7 +36,7 @@ for isub = 1:size(data,2)
     % Dynamic PET: Loading ".v"
         PET_dir = fullfile(data(isub).dir,'PET');
         [rawPET] = spm_select('FPList',PET_dir,strcat('^',data(isub).id,'_.+de10\.v$'));
-        PETDyn_dir = fullfile(PET_dir,'Dynamic')
+        PETDyn_dir = fullfile(PET_dir,'Dynamic');
         mkdir(PETDyn_dir);
         cd(PETDyn_dir);
         
@@ -77,7 +77,14 @@ for isub = 1:size(data,2)
             '29' 	'1d';...
             '30' 	'1e';...
             '31' 	'1f';...
-            '32' 	'20'};
+            '32' 	'20';...
+            '33'    '21';...
+            '34'    '22';...
+            '35'    '23';...
+            '36'    '24';...
+            '37'    '25';...
+            '38'    '26';...
+            '39'    '27'};
         [ncfiles]=spm_select('FPList',PETDyn_dir,strcat('^',data(isub).id,'*.+_de10_.+\.nii$'));
         for i = size(ncfiles,1):-1:1
             [pthref,namref,extref] = fileparts(ncfiles(i,:));
