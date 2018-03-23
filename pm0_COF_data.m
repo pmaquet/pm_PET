@@ -1,6 +1,28 @@
-function data = COF_data(pathtodata);
+function data = pm0_COF_data(pathtodata);
 
 % PM introduced thk inputs. Dose is in MBq. 20170828
+% MRI
+% 3 COF008 B0 phase -
+% 
+% PET
+% COF009 seulement 5 images suppress
+% COF026 pas de PET (S15)
+% COF044 pas de PET (s24)
+% COF061 pas de PET (s33)
+% COF075 pas de PET (s40)
+% COF083 pas de PET (s42)
+% COF088 pas de PET (s45) 
+% COF089 pas de PET (s46) 
+% 
+% COF026 E0769
+% COF044 E0751
+% COF061 E0775
+% COF075 E0770
+% COF083 E0756
+% COF088 E0773
+% COF107 E0777.
+% 
+
 % ------------------------------------------------------------------------
 data = struct('DIR',pathtodata, ... %dir of the study
     'num', [],'id',[], 'sessname',[], 'sspname',[], 'dir',[], 'dev',[], 'EFcoord',[], ...
@@ -238,64 +260,7 @@ data(num).vas_alone = [];
 data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
-%4 - COF009
-num = num + 1;
-data(num).num        = num;
-data(num).weight     = 58;
-data(num).height     = 144;
-data(num).id          = 'COF009';%
-% data(num).thkid       = [];
-% data(num).Dose       = [];
-data(num).PTname      = ['P1' ; 'P2'];
-data(num).sessname    = ['S1' ; 'S2' ; 'S3' ; 'S4' ; 'S5']; %nb of the run for session - from which f00x should start
-data(num).sspname     = ['S1' ; 'S2' ; 'S3' ; 'S4' ; 'S5'];
-data(num).dir         = fullfile(pathtodata,data(num).id);
-data(num).dev         = []; % origin coordinate of structural of subject (see information window in MRcron)
-data(num).EFcoord     = []; % EF based on median across % sessions CHECK!
-data(num).FIDmri      = [];% nas ; lpa ; rpa ; based on median across sessions
-data(num).Sname       = {'LSMA'};
-data(num).channel     = '';
-data(num).MRI         = {'s1006-0005-00001-000224-01.nii,1'};
-data(num).MRIvisits   = '2';
-data(num).LongMRI     = '1466'; % Not done yet
-data(num).T1w         = '2';
-data(num).PDw         = '4';
-data(num).MTw         = '6';
-data(num).B1          = '8';
-data(num).B0magn      = '9'; 
-data(num).B0phase     = '10';
-data(num).PTfile     = {{'spmeeg_COF009_P1_20160920_094402_5.mat'} ... %P1
-{'spmeeg_COF009_P2_20160920_094402_8.mat'} ...%P2
-};
-data(num).DCMfile     = {'merged_spmeeg_.mat'};
-data(num).EEGfile     = {{'spmeeg_COF009_S1_TMSEEG_20161122_081554_3.mat'} ... %S1
-    {'spmeeg_COF009_S2_TMSEEG_20161122_150037_2.mat'} ... %S2
-    {'spmeeg_COF009_S3_TMSEEG_20161122_161826_2.mat'} ... %S3
-    {'spmeeg_COF009_S4_TMSEEG_20161122_200114_2.mat'} ... %S4
-    {'spmeeg_COF009_S5_TMSEEG_20161122_222154_2.mat'} ... %S5
-    };
-data(num).FPL_OPL = []; 
-data(num).Sleep_cycles = {};
-data(num).wkTime = 7;
-data(num).SleepTime = 22.5;
-data(num).closestE = [];
-data(num).dlmo = [18.52];
-data(num).dlmosas = 20.0480;
-data(num).peak = [];
-data(num).ecd = [];
-data(num).dcm = [];
-data(num).twoback = [];
-data(num).threeback = [];
-data(num).sart = [];
-data(num).pvt = [];
-data(num).kss_alone = [];
-data(num).kss_tasks = [];
-data(num).kss_tms = [];
-data(num).vas_alone = [];
-data(num).vas_tasks = [];
-data(num).vas_tms = [];
-
-%5 - COF012 
+%4 - COF012 
 num = num + 1;
 data(num).num        = num;
 data(num).weight     = 59;
@@ -353,7 +318,7 @@ data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
 
-%6 - COF013
+%5 - COF013
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 64;
@@ -409,7 +374,7 @@ data(num).vas_alone = [];
 data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
-%7 - COF014
+%6 - COF014
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 81;
@@ -464,7 +429,7 @@ data(num).vas_alone = [];
 data(num).vas_tasks = [];
 data(num).vas_tms = [3];
 
-%8 - COF015
+%7 - COF015
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 71;
@@ -519,7 +484,7 @@ data(num).vas_alone = [];
 data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
-%9 - COF016
+%8 - COF016
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 64;
@@ -576,7 +541,7 @@ data(num).vas_alone = [];
 data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
-%10 - COF017
+%9 - COF017
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 83;
@@ -632,7 +597,7 @@ data(num).vas_alone = [];
 data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
-%11 - COF020
+%10 - COF020
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 66;
@@ -688,7 +653,7 @@ data(num).vas_alone = [7];
 data(num).vas_tasks = [6];
 data(num).vas_tms = [];
 
-%12 - COF023
+%11 - COF023
 num = num + 1; 
 data(num).num         = num;
 data(num).weight      = 76;
@@ -744,7 +709,7 @@ data(num).vas_alone = [];
 data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
-%13 - COF024
+%12 - COF024
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 100;
@@ -800,7 +765,7 @@ data(num).vas_alone = [];
 data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
-%14 - COF025
+%13 - COF025
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 54;
@@ -856,14 +821,14 @@ data(num).vas_alone = [];
 data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
-%15 - COF026
+%14 - COF026
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 85;
 data(num).height      = 170;
 data(num).id          = 'COF026';%
-% data(num).Dose       = '';
-% data(num).thkid       = [];
+data(num).Dose       = 200;
+data(num).thkid       = 'E0769';
 data(num).PTname      = ['P1' ; 'P2'];
 data(num).sessname    = ['S1' ; 'S2' ; 'S3' ; 'S4' ; 'S5']; %nb of the run for session - from which f00x should start
 data(num).sspname     = ['S1' ; 'S2' ; 'S3' ; 'S4' ; 'S5'];
@@ -911,7 +876,7 @@ data(num).vas_alone = [];
 data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
-%16 - COF027
+%15 - COF027
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 82;
@@ -967,7 +932,7 @@ data(num).vas_alone = [];
 data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
-%17 - COF028
+%16 - COF028
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 53;
@@ -1023,7 +988,7 @@ data(num).vas_alone = [];
 data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
-%18 - COF034
+%17 - COF034
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 72;
@@ -1078,7 +1043,7 @@ data(num).vas_alone = [];
 data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
-%25 - COF035
+%18 - COF035
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 70;
@@ -1271,7 +1236,7 @@ data(num).B1          = '8';
 data(num).B0magn      = '9';
 data(num).B0phase     = '10';
 
-%21 - COF043
+%22 - COF043
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 63;
@@ -1327,14 +1292,14 @@ data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
 
-%21 - COF044
+%23 - COF044
 num = num + 1;
 data(num).num         = num;
-data(num).weight      = 63;
-data(num).height      = 151;
+data(num).weight      = 83;
+data(num).height      = 185;
 data(num).id          = 'COF044';%
-% data(num).thkid       = '';%
-% data(num).Dose        = ;
+data(num).thkid       = 'E0751';%
+data(num).Dose        = 189;
 data(num).PTname      = ['P1' ; 'P2'];
 data(num).sessname    = ['S1' ; 'S2' ; 'S3' ; 'S4' ; 'S5']; %nb of the run for session - from which f00x should start
 data(num).sspname     = ['S1' ; 'S2' ; 'S3' ; 'S4' ; 'S5'];
@@ -1353,7 +1318,7 @@ data(num).B1          = '11';
 data(num).B0magn      = '12';
 data(num).B0phase     = '13';
 
-%22 - COF045
+%24 - COF045
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 70;
@@ -1408,7 +1373,7 @@ data(num).vas_alone = [];
 data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
-%23 - COF048
+%25 - COF048
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 70;
@@ -1434,7 +1399,7 @@ data(num).B1          = '11';
 data(num).B0magn      = '12'; 
 data(num).B0phase     = '13';
 
-%23 - COF049
+%26 - COF049
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 70;
@@ -1490,7 +1455,7 @@ data(num).vas_alone = [];
 data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
-%24 - COF050
+%27 - COF050
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 76;
@@ -1545,7 +1510,7 @@ data(num).vas_alone = [];
 data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
-%27 - COF055
+%28 - COF055
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 81;
@@ -1600,7 +1565,7 @@ data(num).vas_alone = [];
 data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
-%28 - COF057
+%29 - COF057
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 96;
@@ -1655,7 +1620,7 @@ data(num).vas_alone = [];
 data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
-%29 - COF059
+%30 - COF059
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 70;
@@ -1710,7 +1675,7 @@ data(num).vas_alone = [];
 data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
-%26 - COF060
+%31 - COF060
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 77;
@@ -1765,14 +1730,14 @@ data(num).vas_alone = [];
 data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
-%30 - COF061
+%32 - COF061
 num = num + 1;
 data(num).num         = num;
-data(num).weight      = 75;
-data(num).height      = 165;
+data(num).weight      = 62;
+data(num).height      = 172;
 data(num).id          = 'COF061';%
-% data(num).thkid       = '';%
-% data(num).Dose        = ;
+data(num).thkid       = 'E0775';%
+data(num).Dose        = 192;
 data(num).PTname      = ['P1' ; 'P2'];
 data(num).sessname    = ['S1' ; 'S2' ; 'S3' ; 'S4' ; 'S5']; %nb of the run for session - from which f00x should start
 data(num).sspname     = ['S1' ; 'S2' ; 'S3' ; 'S4' ; 'S5'];
@@ -1791,7 +1756,7 @@ data(num).B1          = '9';
 data(num).B0magn      = '10'; 
 data(num).B0phase     = '11';
 
-%30 - COF062
+%33 - COF062
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 73;
@@ -1817,7 +1782,7 @@ data(num).B1          = '11';
 data(num).B0magn      = '12'; 
 data(num).B0phase     = '13';
 
-%30 - COF063
+%34 - COF063
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 75;
@@ -1872,7 +1837,7 @@ data(num).vas_alone = [];
 data(num).vas_tasks = [];
 data(num).vas_tms = [];
 
-%30 - COF065
+%35 - COF065
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 75;
@@ -1898,7 +1863,7 @@ data(num).B1          = '11';
 data(num).B0magn      = '12'; 
 data(num).B0phase     = '13';
 
-%30 - COF068
+%36 - COF068
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 60;
@@ -1924,7 +1889,7 @@ data(num).B1          = '11';
 data(num).B0magn      = '12'; 
 data(num).B0phase     = '13';
 
-%30 - COF070
+%37 - COF070
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 60;
@@ -1950,7 +1915,7 @@ data(num).B1          = '8';
 data(num).B0magn      = '9'; 
 data(num).B0phase     = '10';
 
-% 31 COF073	1524	5	7	9	11	12
+% 38 COF073	1524	5	7	9	11	12
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 80;
@@ -1976,14 +1941,14 @@ data(num).B1          = '11';
 data(num).B0magn      = '12'; 
 data(num).B0phase     = '13';
 
-% 32 COF075	1464	5	7	9	11	12	
+% 39 COF075	1464	5	7	9	11	12	
 num = num + 1;
 data(num).num         = num;
-data(num).weight      = 63;
-data(num).height      = 158;
+data(num).weight      = 65;
+data(num).height      = 160;
 data(num).id          = 'COF075';%
 data(num).thkid       = 'E0753';%
-data(num).Dose        = 188;
+data(num).Dose        = 193;
 data(num).PTname      = ['P1' ; 'P2'];
 data(num).sessname    = ['S1' ; 'S2' ; 'S3' ; 'S4' ; 'S5']; %nb of the run for session - from which f00x should start
 data(num).sspname     = ['S1' ; 'S2' ; 'S3' ; 'S4' ; 'S5'];
@@ -2002,7 +1967,7 @@ data(num).B1          = '11';
 data(num).B0magn      = '12'; 
 data(num).B0phase     = '13';
 
-% 33 COF080	1481	5	7	9	11	12	
+% 40 COF080	1481	5	7	9	11	12	
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 51;
@@ -2028,14 +1993,14 @@ data(num).B1          = '11';
 data(num).B0magn      = '12'; 
 data(num).B0phase     = '13';
 
-% 34 COF083	1525	5	7	9	11	12
+% 41 COF083	1525	5	7	9	11	12
 num = num + 1;
 data(num).num         = num;
-data(num).weight      = 63;
-data(num).height      = 158;
+data(num).weight      = 88;
+data(num).height      = 182;
 data(num).id          = 'COF083';%
 data(num).thkid       = 'E0753';%
-data(num).Dose        = 188;
+data(num).Dose        = 198;
 data(num).PTname      = ['P1' ; 'P2'];
 data(num).sessname    = ['S1' ; 'S2' ; 'S3' ; 'S4' ; 'S5']; %nb of the run for session - from which f00x should start
 data(num).sspname     = ['S1' ; 'S2' ; 'S3' ; 'S4' ; 'S5'];
@@ -2054,7 +2019,7 @@ data(num).B1          = '11';
 data(num).B0magn      = '12';
 data(num).B0phase     = '13';
 
-% 35 COF085	1505	5	7	9	11	12
+% 42 COF085	1505	5	7	9	11	12
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 63;
@@ -2080,7 +2045,7 @@ data(num).B1          = '11';
 data(num).B0magn      = '12'; 
 data(num).B0phase     = '13';
 
-% 36 COF086	1528	5	7	9	11	12	
+% 43 COF086	1528	5	7	9	11	12	
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 65;
@@ -2106,14 +2071,14 @@ data(num).B1          = '11';
 data(num).B0magn      = '12'; 
 data(num).B0phase     = '13';
 
-% 37 COF088	1557	5	7	9	11	12
+% 44 COF088	1557	5	7	9	11	12
 num = num + 1;
 data(num).num         = num;
-% data(num).weight      = ;
-% data(num).height      = ;
+data(num).weight      = 53;
+data(num).height      = 163;
 data(num).id          = 'COF088';%
 data(num).thkid       = 'E0758';%
-% data(num).Dose        = ;
+data(num).Dose        = 176;
 data(num).PTname      = ['P1' ; 'P2'];
 data(num).sessname    = ['S1' ; 'S2' ; 'S3' ; 'S4' ; 'S5']; %nb of the run for session - from which f00x should start
 data(num).sspname     = ['S1' ; 'S2' ; 'S3' ; 'S4' ; 'S5'];
@@ -2132,14 +2097,14 @@ data(num).B1          = '11';
 data(num).B0magn      = '12'; 
 data(num).B0phase     = '13';
 
-% 38 COF089	1556	5	7	9	11	12	
+% 45 COF089	1556	5	7	9	11	12	
 num = num + 1;
 data(num).num         = num;
-% data(num).weight      = ;
-% data(num).height      = ;
+data(num).weight      = 73;
+data(num).height      = 160;
 data(num).id          = 'COF089';%
 data(num).thkid       = 'E0758';%
-% data(num).Dose        = ;
+data(num).Dose        = 193;
 data(num).PTname      = ['P1' ; 'P2'];
 data(num).sessname    = ['S1' ; 'S2' ; 'S3' ; 'S4' ; 'S5']; %nb of the run for session - from which f00x should start
 data(num).sspname     = ['S1' ; 'S2' ; 'S3' ; 'S4' ; 'S5'];
@@ -2158,7 +2123,7 @@ data(num).B1          = '11';
 data(num).B0magn      = '12'; 
 data(num).B0phase     = '13';
 
-% 39 COF091	1554	5	7	9	11	12	
+% 46 COF091	1554	5	7	9	11	12	
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 66;
@@ -2184,7 +2149,7 @@ data(num).B1          = '11';
 data(num).B0magn      = '12'; 
 data(num).B0phase     = '13';
 
-% 40 COF092	1554	5	7	9	11	12	
+% 47 COF092	1554	5	7	9	11	12	
 num = num + 1;
 data(num).num         = num;
 data(num).weight      = 57;
@@ -2210,7 +2175,33 @@ data(num).B1          = '11';
 data(num).B0magn      = '12'; 
 data(num).B0phase     = '13';
 
-%31 - COF9999
+% 47 COF107		
+% num = num + 1;
+% data(num).num         = num;
+% data(num).weight      = 93;
+% data(num).height      = 184;
+% data(num).id          = 'COF091';%
+% data(num).thkid       = 'E0772';%
+% data(num).Dose        = 177;
+% data(num).PTname      = ['P1' ; 'P2'];
+% data(num).sessname    = ['S1' ; 'S2' ; 'S3' ; 'S4' ; 'S5']; %nb of the run for session - from which f00x should start
+% data(num).sspname     = ['S1' ; 'S2' ; 'S3' ; 'S4' ; 'S5'];
+% data(num).dir         = fullfile(pathtodata,data(num).id);
+% data(num).dev         = []; % origin coordinate of structural of subject (see information window in MRcron)
+% data(num).EFcoord     = []; % EF based on median across % sessions CHECK!
+% data(num).FIDmri      = [];% nas ; lpa ; rpa ; based on median across sessions
+% data(num).Sname       = {'LSMA'};
+% data(num).channel     = '';
+% data(num).MRI         = {'s1311-0005-00001-000224-01.nii,1'};
+% data(num).LongMRI     = '1554'; 
+% data(num).T1w         = '5';
+% data(num).PDw         = '7';
+% data(num).MTw         = '9';
+% data(num).B1          = '11';
+% data(num).B0magn      = '12'; 
+% data(num).B0phase     = '13';
+
+%49 - COF9999
 num = num + 1;
 data(num).num         = num;
 data(num).dir         = 'D:\thk\COF999'

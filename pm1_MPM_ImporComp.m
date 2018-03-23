@@ -66,7 +66,7 @@ cd ('D:\thk\thk_codes')
 
 data = pm0_COF_data(root_pth);
 
-for isub = [3 10 20 32] % 3: COF008 %1:size(data,2) 
+for isub = 32%[3 10 20 32] % 3: COF008 %1:size(data,2) 
     if isempty(data(isub).LongMRI)
         fprintf(1,'SKIPPING SUBJECT %i : %s - no MPM - \n',isub,data(isub).id)
     else

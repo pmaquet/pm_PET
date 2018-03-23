@@ -11,7 +11,7 @@ addpath('D:\thk\thk_codes')
 
 data = pm0_COF_data(fullfile(root_pth));
 MTFiles=[];PDFiles=[];R1Files=[]; R2Files=[];
-for isub = 1:size(data,2)
+for isub = 32 %1:size(data,2)
     if exist(spm_select('FPList',fullfile(data(isub).dir,'MRI','nii2','Results'),strcat('.+MT\.nii')),'file')==2
         fprintf(1,'LOADING SUBJECT %i : %s\n',isub,data(isub).id)
         MTFiles = [MTFiles;cellstr(spm_select('FPList',fullfile(data(isub).dir,'MRI','nii2','Results'),strcat('.+MT\.nii')))];

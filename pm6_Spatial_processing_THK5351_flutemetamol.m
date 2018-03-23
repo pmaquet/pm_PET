@@ -6,7 +6,7 @@ function Spatial_processing_PET_THK5351_flutemetamol_Part_I(radiotracer)
 % realignment of the dynamic data and creation of the sumframe image.
 %
 % Radiotracers: THK5351 = 1; Flutemetamol = 2;
-% THK5351: 40 to 60min corresponding to 23-26 frames
+% THK5351: 40 to 60 min corresponding to 23-26 frames
 % Flutemetamol: all frames
 %
 % Note: data is supposed to be organized as follow:
@@ -23,30 +23,7 @@ addpath('D:\thk\thk_codes')
 
 data = pm0_COF_data(fullfile(root_pth));
 
-for isub = 5:size(data,2)
-    fprintf(1,'PROCESSING SUBJECT %i : %s\n',isub,data(isub).id)
-    
-    % check for MRI an dPET directories
-    cd(fullfile(data(isub).dir));
-    if exist('MRI','dir')==0
-        fprintf(1,'Pas de MRI pour %s\n',data(isub).id)
-    elseif exist('PET','dir')==0
-        fprintf(1,'Pas de PET pour %s\n',data(isub).id)
-    else
-    % Dynamic PET: Loading ".v"
-        PET_dir = fullfile(data(isub).dir,'PET');
-        [rawPET] = spm_select('FPList',PET_dir,strcat('^',data(isub).id,'_.+de10\.v$'));
-        PETDyn_dir = fullfile(PET_dir,'Dynamic');
-        mkdir(PETDyn_dir);
-        cd(PETDyn_dir);
-        
-        matlabbatch = [];
-        matlabbatch{1}.spm.util.import.ecat.data = cellstr(rawPET);
-        matlabbatch{1}.spm.util.import.ecat.opts.ext = 'nii';
-        spm_jobman('run',matlabbatch);
-        clear matlabbatch;
-        % Rename converted files : hexadecimal to decimal numbering
-        Ren = {'1' 	'01';...
+Ren = {'1' 	'01';...
             '2' 	'02';...
             '3' 	'03';...
             '4' 	'04';...
@@ -85,6 +62,32 @@ for isub = 5:size(data,2)
             '37'    '25';...
             '38'    '26';...
             '39'    '27'};
+        
+for isub = 32%47:size(data,2)
+    fprintf(1,'PROCESSING SUBJECT %i : %s\n',isub,data(isub).id)
+    
+    % check for MRI an dPET directories
+    cd(fullfile(data(isub).dir));
+    if exist('MRI','dir')==0 
+        fprintf(1,'Pas de MRI pour %s\n',data(isub).id)
+    elseif exist('PET','dir')==0 
+        fprintf(1,'Pas de PET pour %s\n',data(isub).id)
+    else
+    % Dynamic PET: Loading ".v"
+        PET_dir = fullfile(data(isub).dir,'PET');
+        [rawPET] = spm_select('FPList',PET_dir,strcat('^',data(isub).id,'_.+de10\.v$'));
+        PETDyn_dir = fullfile(PET_dir,'Dynamic');
+        mkdir(PETDyn_dir);
+        cd(PETDyn_dir);
+        
+        matlabbatch = [];
+        matlabbatch{1}.spm.util.import.ecat.data = cellstr(rawPET);
+        matlabbatch{1}.spm.util.import.ecat.opts.ext = 'nii';
+        spm_jobman('run',matlabbatch);
+        clear matlabbatch;
+        % Rename converted files : hexadecimal to decimal numbering
+        Nscan = size(ls('*.nii'),1);
+        
         [ncfiles]=spm_select('FPList',PETDyn_dir,strcat('^',data(isub).id,'*.+_de10_.+\.nii$'));
         for i = size(ncfiles,1):-1:1
             [pthref,namref,extref] = fileparts(ncfiles(i,:));

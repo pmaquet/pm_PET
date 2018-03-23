@@ -77,7 +77,7 @@ end
 fprintf(fidout,'%s\t%s\t%s','GM','WM','CSF');
 % end
 
-for isub = setdiff([1:size(data,2)],[13 22 36]) %1:size(data,2)
+for isub =47:size(data,2)
     fprintf(1,'PROCESSING SUBJECT %i / %i : %s\n',isub,size(data,2),data(isub).id)
     % check for MRI and PET directories
     %     cd(fullfile(data(isub).dir));

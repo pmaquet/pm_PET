@@ -21,13 +21,13 @@ function Spatial_processing_MPM
 % =========================================================================
 
 global data;
-spm pet;
+spm fmri;
 root_pth ='D:\thk';
 addpath('D:\thk\thk_codes')
 
 data = pm0_COF_data(fullfile(root_pth));
 
-for isub = 1:size(data,2) %13 22 36 : problème
+for isub =32
     fprintf(1,'PROCESSING SUBJECT %i : %s\n',isub,data(isub).id)
     if exist(fullfile(data(isub).dir,'MRI','nii2','Results')) == 7
         % Load batch
