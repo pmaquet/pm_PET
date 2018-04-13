@@ -172,9 +172,9 @@ for isub =setdiff([1:size(data,2)],3) %[4 14 23 32 39 41 44 45] %
         system([prefix 'petpvc -i ' unix_petpvc_in ' -m ' unix_mask4d ' -o ' unix_petpvc_out ' --pvc IY -x 6.0 -y 6.0 -z 6.0' suffix]);
         fprintf(1,'Call successful for %s\n','petpvc')
         
-        % Rename PET image with petpvc following SPM filenaming
-        % (prefixing)
+        % Rename PET image with petpvc following SPM filenaming (prefixing)
         movefile(fullfile(pth,['r' nam '_IY' ext]),fullfile(pth,['Pr' nam  ext]))
+        
         % Normalize PET & PETpvc images using MPM normalization parameters
         matlabbatch{1}.spm.spatial.normalise.write.subj.def = cellstr(Normdef)
         matlabbatch{1}.spm.spatial.normalise.write.subj.resample = {fullfile(pth,['r' nam ext]);fullfile(pth,['Pr' nam  ext])};
