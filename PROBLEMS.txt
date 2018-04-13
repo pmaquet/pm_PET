@@ -1,0 +1,21 @@
+MRI
+3 COF008 B0 phase -
+
+PET
+COF009 seulement 5 images suppress
+COF026 pas de PET (S15)
+COF044 pas de PET (s24)
+COF061 pas de PET (s33)
+COF075 pas de PET (s40)
+COF083 pas de PET (s42)
+COF088 pas de PET (s45) 
+COF089 pas de PET (s46) 
+
+COF026 E0769
+COF044 E0751
+COF061 E0775
+COF075 E0770
+COF083 E0756
+COF088 E0773
+COF107 E0777.
+

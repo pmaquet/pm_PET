@@ -14,6 +14,13 @@ function Spatial_processing_PET_THK5351_flutemetamol_Part_II(radiotracer)
 %
 % M.Bahri: 2017/09/04
 % -------------------------------------------------------------------------
+% SPM-style file renaming (pm 20180412)
+% image PET originale                                                                       = rnsCOF*40-60.nii
+% image PET originale + coregister PET to MT image                                          = rrnsCOF*40-60
+% image PET originale + coregister + petpvc                                                 = PrrnsCOF*40-60_IY
+% image PET originale + coregister + petpvc + normalization with MPM parameters             = wPrrnsCOF*40-60
+% image PET originale + coregister + petpvc + normalization  + SUV                          = SUVwPrrns*40-60
+% image PET originale + coregister + petpvc + normalization  + SUV + division par mean WM   = SUVRwPrrns*40-60
 % =========================================================================
 
 % Radiotracer: THK5351 = 1; Flutemetamol = 2
@@ -49,6 +56,7 @@ data = pm0_COF_data(fullfile(root_pth));
 % Open output text file
 % switch radiotracer
 %     case 1
+% =========================================================================
 % Load Cerebelum grey mater mask
 Refroi_CerebGM = fullfile(root_pth,'thk_codes','erodeRefroi_CerebGM_MNI.nii');
 ma = spm_vol(Refroi_CerebGM);
@@ -76,11 +84,10 @@ for roi=1:length(roisfile)
 end
 fprintf(fidout,'%s\t%s\t%s','GM','WM','CSF');
 % end
-
-for isub =47:size(data,2)
+% =========================================================================
+for isub =setdiff([1:size(data,2)],3) %[4 14 23 32 39 41 44 45] %
     fprintf(1,'PROCESSING SUBJECT %i / %i : %s\n',isub,size(data,2),data(isub).id)
     % check for MRI and PET directories
-    %     cd(fullfile(data(isub).dir));
     if exist(fullfile(root_pth,data(isub).id,'PET'),'dir')==0 || isempty(data(isub).thkid)
         fprintf(1,'Pas de PET pour %s\n',data(isub).id)
     elseif exist(fullfile(root_pth,data(isub).id,'MRI','nii2','Results'),'dir')==0
@@ -98,18 +105,18 @@ for isub =47:size(data,2)
         fprintf(1,'calling fsl\n')
         if ispc,
             for i=1:6,
-                fprintf(1,'Return\n')
+                fprintf(1,'Press return\n')
                 [s r]=system(['bash -c ''~/code/wslpath -a -u "' Segmaps{i} '"''']);
                 fprintf(1,'Call successful for %s\n',Segmaps{i})
                 r(end)='';
                 unix_Segmaps{i}=r;
             end
-            fprintf(1,'Return\n')
+            fprintf(1,'Press return\n')
             [s r]=system(['bash -c ''~/code/wslpath -a -u "' c4c5c6 '"''']); r(end)='';
             fprintf(1,'Call successful for %s\n','c4c5c6')
             unix_c4c5c6=r;
             
-            fprintf(1,'Return\n')
+            fprintf(1,'Press return\n')
             [s r]=system(['bash -c ''~/code/wslpath -a -u "' mask4d '"''']); r(end)='';
             fprintf(1,'Call successful for %s\n','mask4d')
             unix_mask4d=r;
@@ -123,31 +130,33 @@ for isub =47:size(data,2)
         %%
         fprintf(1,'Compute fsl masks\n')
         % Calculate the sum of the tissues c4, c5, c6 using fsl command line
-        fprintf(1,'Return\n')
+        fprintf(1,'Press return\n')
         system([prefix 'fslmaths ' unix_Segmaps{4} ' -add ' unix_Segmaps{5} ' -add ' unix_Segmaps{6} ' ' unix_c4c5c6 suffix]);
         fprintf(1,'Call successful for %s\n','fslmaths')
         % Create the 4D mask containing c1,c2,c3, and the background including
         % c4,c5,and c6.
-        fprintf(1,'Return\n')
+        fprintf(1,'Press return\n')
         system([prefix 'fslmerge -t ' unix_mask4d ' ' unix_Segmaps{1} ' ' unix_Segmaps{2} ' ' unix_Segmaps{3} ' ' unix_c4c5c6 suffix]);
         fprintf(1,'Call successful for %s\n','fslmerge')
-        % Coregester PET into MRI MT image using SPM
+        % =========================================================================
+        % Coregister PET into MRI MT image using SPM
         [pth,nam,ext] = fileparts(PETfile);
         matlabbatch{1}.spm.spatial.coreg.estwrite.ref = cellstr(MTmap);
         matlabbatch{1}.spm.spatial.coreg.estwrite.source = cellstr(PETfile);
         spm_jobman('run',matlabbatch)
         clear matlabbatch;
         
+        % =========================================================================
         %% cd: make sure we have unix filepaths
         fprintf(1,'Compute pvc\n')
         petpvc_in=fullfile(pth,['r' nam ext]);
         petpvc_out=fullfile(pth,['r' nam '_IY' ext]);
         if ispc,
-            fprintf(1,'Return\n')
+            fprintf(1,'Press return\n')
             [s r]=system(['bash -c ''~/code/wslpath -a -u "' petpvc_in '"''']); r(end)='';
             fprintf(1,'Call successful for %s\n','petpvc_in')
             unix_petpvc_in=r;
-            fprintf(1,'Return\n')
+            fprintf(1,'Press return\n')
             [s r]=system(['bash -c ''~/code/wslpath -a -u "' petpvc_out '"''']); r(end)='';
             fprintf(1,'Call successful for %s\n','petpvc_out')
             unix_petpvc_out=r;
@@ -159,49 +168,113 @@ for isub =47:size(data,2)
         
         %%
         
-        % Partial volume correction using PETPVC toolbox
-        fprintf(1,'Return\n')
+        % Partial volume correction using PETPVC toolbox -->  rrns
         system([prefix 'petpvc -i ' unix_petpvc_in ' -m ' unix_mask4d ' -o ' unix_petpvc_out ' --pvc IY -x 6.0 -y 6.0 -z 6.0' suffix]);
         fprintf(1,'Call successful for %s\n','petpvc')
+        
+        % Rename PET image with petpvc following SPM filenaming
+        % (prefixing)
+        movefile(fullfile(pth,['r' nam '_IY' ext]),fullfile(pth,['Pr' nam  ext]))
         % Normalize PET & PETpvc images using MPM normalization parameters
         matlabbatch{1}.spm.spatial.normalise.write.subj.def = cellstr(Normdef)
-        matlabbatch{1}.spm.spatial.normalise.write.subj.resample = {fullfile(pth,['r' nam ext]);fullfile(pth,['r' nam '_IY' ext])};
+        matlabbatch{1}.spm.spatial.normalise.write.subj.resample = {fullfile(pth,['r' nam ext]);fullfile(pth,['Pr' nam  ext])};
         % Bounding box, voxel size and interpolation options could be modified
         matlabbatch{1}.spm.spatial.normalise.write.woptions.bb = [-78 -112 -70;78 76 85];
         matlabbatch{1}.spm.spatial.normalise.write.woptions.vox = [2 2 2];
         matlabbatch{1}.spm.spatial.normalise.write.woptions.interp = 4;
         spm_jobman('run',matlabbatch)
         clear matlabbatch;
+        
+        % =========================================================================
         % Create a temporary PET image with same dimension as the AAL  atlas
         matlabbatch{1}.spm.util.imcalc.input = {aal2_atlas;fullfile(pth,['wr' nam '_IY' ext])};
         matlabbatch{1}.spm.util.imcalc.output = fullfile(pth,['tmpwr' nam '_IY' ext]);
         matlabbatch{1}.spm.util.imcalc.outdir = {pth};
         matlabbatch{1}.spm.util.imcalc.expression = 'i2';
-        
         spm_jobman('run',matlabbatch);
         clear matlabbatch;
         
         switch radiotracer
             case 1
                 fprintf(fidout,'\n%s\t%s',data(isub).id,'Radiotracer: THK5153');
-                % Extract Cerebelum GM value for each subject
-                Ma = spm_vol(fullfile(pth,['tmpwr' nam '_IY' ext]));
-                subj_vol = spm_read_vols(Ma);
-                % Calculate mean value of Cerebelum GM
-                region_mean = mean(subj_vol(ind));
-                fprintf(fid,'\n%s\t', char(data(isub).id));
-                fprintf(fid,'%d\t', region_mean);
-                % Normalized PET division by value in ROI Cerebelum GM
-                f = strcat('i1 ./ ',num2str(region_mean));
-                value1 = round(region_mean);
+                %                 % Extract Cerebelum GM value for each subject
+                %                 Ma = spm_vol(fullfile(pth,['tmpwr' nam '_IY' ext]));
+                %                 subj_vol = spm_read_vols(Ma);
+                %                 % Calculate mean value of Cerebelum GM
+                %                 region_mean = mean(subj_vol(ind));
+                %                 fprintf(fid,'\n%s\t', char(data(isub).id));
+                %                 fprintf(fid,'%d\t', region_mean);
+                %                 % Normalized PET division by value in ROI Cerebelum GM
+                %                 f = strcat('i1 ./ ',num2str(region_mean));
+                %                 value1 = round(region_mean);
+                %
+                %                 matlabbatch{1}.spm.util.imcalc.input = {fullfile(pth,['wr' nam '_IY' ext])};
+                %                 matlabbatch{1}.spm.util.imcalc.output = fullfile(pth,['wr' nam '_IY' strcat('_divROI',num2str(value1)) ext]);
+                %                 matlabbatch{1}.spm.util.imcalc.outdir = {pth};
+                %                 matlabbatch{1}.spm.util.imcalc.expression = f;
+                %
+                %                 spm_jobman('run',matlabbatch);
+                %                 clear matlabbatch;
                 
-                matlabbatch{1}.spm.util.imcalc.input = {fullfile(pth,['wr' nam '_IY' ext])};
-                matlabbatch{1}.spm.util.imcalc.output = fullfile(pth,['wr' nam '_IY' strcat('_divROI',num2str(value1)) ext]);
+                 % =========================================================================
+                % Create SUV image (Normalized PET is divided by injected dose and patient
+                % weight) from  wrrn  and wPrrn images
+                value = data(isub).Dose/data(isub).weight*1000; %(*1000 if dose in MBq)
+                f = strcat('i1 ./ ',num2str(value));
+                
+                matlabbatch{1}.spm.util.imcalc.input = {fullfile(pth,['wr' nam ext])};
+                matlabbatch{1}.spm.util.imcalc.output = fullfile(pth,['SUVwr' nam ext]);
+                matlabbatch{1}.spm.util.imcalc.outdir = {pth};
+                matlabbatch{1}.spm.util.imcalc.expression = f;
+                spm_jobman('run',matlabbatch);
+                clear matlabbatch;
+                
+                
+                matlabbatch{1}.spm.util.imcalc.input = {fullfile(pth,['wPr' nam  ext])};
+                matlabbatch{1}.spm.util.imcalc.output = fullfile(pth,['SUVwPr' nam  ext]);
+                matlabbatch{1}.spm.util.imcalc.outdir = {pth};
+                matlabbatch{1}.spm.util.imcalc.expression = f;
+                spm_jobman('run',matlabbatch);
+                clear matlabbatch;
+                
+                % =========================================================================
+                % Create SUVR image by division by grey matter mask
+                % pm 20180325
+                % load individual white matter mask 
+                Mask=spm_select('FPList',fullfile(data(isub).dir,'MRI','nii2','Results'),strcat('^wc2s',data(isub).LongMRI,'.+\.nii$'));
+                Vmask = spm_vol(Mask);
+                [Y,XYZmm]  = spm_read_vols(Vmask);
+                Ind = intersect(find(Y>0.9), find(XYZmm(3,:)>0)); % WM above ACPC plane
+                
+                %load image wo petpvc
+                IndivPET=spm_select('FPList',pth,['SUVwr' nam ext]);
+                Vin = spm_vol(IndivPET);
+                [Y,XYZmm]  = spm_read_vols(Vmask);
+                region_mean = mean(Y(Ind));
+                f = strcat('i1 ./ ',num2str(region_mean));
+                
+                matlabbatch{1}.spm.util.imcalc.input = {IndivPET};
+                matlabbatch{1}.spm.util.imcalc.output = fullfile(pth,['SUVRwr' nam ext]);
                 matlabbatch{1}.spm.util.imcalc.outdir = {pth};
                 matlabbatch{1}.spm.util.imcalc.expression = f;
                 
-                % spm_jobman('run',matlabbatch);
-                clear matlabbatch;
+                spm_jobman('run',matlabbatch);
+                clear matlabbatch region_mean;
+                
+                %load  image with petpvc
+                IndivPET=spm_select('FPList',pth,['SUVwPr' nam ext]);
+                Vin = spm_vol(IndivPET);
+                [Y,XYZmm]  = spm_read_vols(Vmask);
+                region_mean = mean(Y(Ind));
+                f = strcat('i1 ./ ',num2str(region_mean));
+                
+                matlabbatch{1}.spm.util.imcalc.input = {IndivPET};
+                matlabbatch{1}.spm.util.imcalc.output = fullfile(pth,['SUVRwPr' nam ext]);
+                matlabbatch{1}.spm.util.imcalc.outdir = {pth};
+                matlabbatch{1}.spm.util.imcalc.expression = f;
+                
+                spm_jobman('run',matlabbatch);
+                clear matlabbatch region_mean;
                 
             case 2
                 fprintf(fidout,'\n%s\t%s',data(isub).id,'Radiotracer: Flutemetamol');

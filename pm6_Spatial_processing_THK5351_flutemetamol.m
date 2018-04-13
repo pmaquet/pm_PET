@@ -63,7 +63,7 @@ Ren = {'1' 	'01';...
             '38'    '26';...
             '39'    '27'};
         
-for isub = 32%47:size(data,2)
+for isub = 1:size(data,2)
     fprintf(1,'PROCESSING SUBJECT %i : %s\n',isub,data(isub).id)
     
     % check for MRI an dPET directories

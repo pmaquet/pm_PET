@@ -5,7 +5,7 @@ function data = pm0_COF_data(pathtodata);
 % 3 COF008 B0 phase -
 % 
 % PET
-% COF009 seulement 5 images suppress
+% COF009 seulement 5 images discard
 % COF026 pas de PET (S15)
 % COF044 pas de PET (s24)
 % COF061 pas de PET (s33)
@@ -266,8 +266,8 @@ data(num).num        = num;
 data(num).weight     = 59;
 data(num).height     = 165;
 data(num).id          = 'COF012';%
-% data(num).thkid       = [];
-% data(num).Dose       = [];
+data(num).thkid       = 'E0591';
+data(num).Dose        = 190;
 data(num).PTname      = ['P1' ; 'P2'];
 data(num).sessname    = ['S1' ; 'S2' ; 'S3' ; 'S4' ; 'S5']; %nb of the run for session - from which f00x should start
 data(num).sspname     = ['S1' ; 'S2' ; 'S3' ; 'S4' ; 'S5'];
